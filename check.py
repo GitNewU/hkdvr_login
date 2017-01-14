@@ -50,8 +50,7 @@ def getinfo(host):
     url_login = host + '/ISAPI/Security/userCheck'
 
     try:
-        req = requests.get(url=url_login, auth=(username, password), timeout=timeout)
-        result = req.text
+        result = requests.get(url=url_login, auth=(username, password), timeout=timeout).text
         status = re.findall(r'<statusValue>(.*)</statusValue>', result)
         if status[0] == '200':
             print '[√] Host http://' + host + ' Login Success!'
@@ -73,7 +72,7 @@ if __name__ == '__main__':
     content3 = req3.content
 
     content = content1+content2+content3
-    iplist = re.findall(r'href="http://(.+?)">',content)
+    iplist = re.findall(r'href="http://(.+?)">', content)
 
     print '[*] Total '+str(len(iplist))+" items..."
     print '[*] Running...\n'

@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # coding=utf-8
 # code by 92ez.com
-# last modify time 2016-07-15
 # python dvrlogin.py 1.1.1.1-1.1.2.1 200
 
 import threading
@@ -62,8 +61,7 @@ def getinfo(host):
     url_login = host + '/ISAPI/Security/userCheck'
 
     try:
-        req = requests.get(url=url_login, auth=(username, password), timeout=timeout)
-        result = req.text
+        result = requests.get(url=url_login, auth=(username, password), timeout=timeout).text
         status = re.findall(r'<statusValue>(.*)</statusValue>', result)
         if status[0] == '200':
             print '[√] Host http://' + host + ' Login Success!'
